@@ -1,13 +1,21 @@
-const Stripe = require('stripe');
-const dotenv = require('dotenv');
-const express = require('express');
-const app = express();
-const stripeApp = Stripe(process.env.STRIPE_PUBLIC_KEY);
+import Stripe from "stripe";
+import dotenv from "dotenv";
+import express from "express";
+import path from "path";
 
-app.use(express.static('.'));
+dotenv.config();
+
+const app = express();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {apiVersion: "2020-08-27"});
+
+console.log(path.join(__dirname,'./assets'));
+
+app.use(express.static(path.join(__dirname,'./assets')));
+
 const YOUR_DOMAIN = 'http://localhost:4242';
+
 app.post('/create-checkout-session', async (req, res) => {
-  const session = await stripeApp.checkout.sessions.create({
+  const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: [
       {
