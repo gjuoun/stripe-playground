@@ -1,5 +1,5 @@
 // A reference to Stripe.js initialized with your real test publishable API key.
-let stripe = Stripe("");
+let stripe = Stripe("pk_test_51IQRQILJ7Drw2pgiCavB0DgWmooS6ZL7878VJmj6w53i5Opu42rWjXbqXaLmD2O73nMuD3WMNKcx01UKKyG1uhDl00LeQZDkhr");
 // The items the customer wants to buy
 let purchase = {
   items: [{ id: "xl-tshirt" }]
@@ -17,6 +17,8 @@ fetch("/create-payment-intent", {
     return result.json();
   })
   .then(function (data) {
+    console.log(data);
+
     let elements = stripe.elements();
     let style = {
       base: {
@@ -54,6 +56,7 @@ fetch("/create-payment-intent", {
 // prompt the user to enter authentication details without leaving your page.
 let payWithCard = function (stripe, card, clientSecret) {
   loading(true);
+  console.log(card)
   stripe
     .confirmCardPayment(clientSecret, {
       payment_method: {
@@ -61,6 +64,7 @@ let payWithCard = function (stripe, card, clientSecret) {
       }
     })
     .then(function (result) {
+      console.log(result)
       if (result.error) {
         // Show error to your customer
         showError(result.error.message);
