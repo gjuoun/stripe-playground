@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import Stripe from 'stripe';
 dotenv.config()
+
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET ?? ""
 const stripeApiKey = process.env.STRIPE_API_KEY ?? ""
 
