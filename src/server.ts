@@ -33,7 +33,11 @@ app.post("/create-payment-intent", async (req, res) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 19999,
       currency: "usd",
-      customer: `cus_J2WqKGT0GEWsQY`
+      customer: `cus_JA1mFntiFtzosT`,
+      metadata: {
+        orderId: 12345,
+        userId: "userId test"
+      }
     });
     res.send({
       clientSecret: paymentIntent.client_secret
