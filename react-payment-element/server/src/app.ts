@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
 
 app.post("/create-payment-intent", async (req, res) => {
   const clientName = req.body.clientName;
+  const amount = req.body.amount;
   console.log(req.body);
   
   if (!clientName) {
@@ -28,7 +29,7 @@ app.post("/create-payment-intent", async (req, res) => {
       metadata: {
         clientName
       },
-      amount: 100, // client payment amount ,100 = 1.00 CAD
+      amount, // client payment amount ,100 = 1.00 CAD
       currency: "cad",
       automatic_payment_methods: {
         enabled: true,

@@ -16,7 +16,7 @@ const App = () => {
   const [stripeKey, setStripeKey] = useState('')
   const [clientSecret, setClientSecret] = useState('')
   const [openModal, setOpenModal] = useState(false)
-  
+  const [amount, setAmount] = useState(100)
 
   useEffect(() => {
 
@@ -24,7 +24,7 @@ const App = () => {
       const response = await fetch('http://localhost:3001/create-payment-intent', {
         method: "POST",
         headers: { 'Content-Type': "application/json" },
-        body: JSON.stringify({ clientName: "Jun Guo" })
+        body: JSON.stringify({ clientName: "Jun Guo", amount})
       }).then(res => res.json())
 
       const newClientSecret = (response as Res).clientSecret
