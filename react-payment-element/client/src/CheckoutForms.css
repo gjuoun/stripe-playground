@@ -1,0 +1,11 @@
+.container{
+  width: 300px;
+  margin: auto;
+}
+
+.input-wrapper{
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid dodgerblue;
+  margin: 8px 0;
+}
