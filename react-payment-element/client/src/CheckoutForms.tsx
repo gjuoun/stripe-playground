@@ -1,8 +1,15 @@
-import React from 'react'
-import './CheckoutForms.css'
-import { CardNumberElement, CardCvcElement, CardExpiryElement, useStripe, useElements, CardElement } from "@stripe/react-stripe-js"
-export const CheckoutForms = () => {
+import React, { useEffect, useState } from 'react'
+import { PaymentElement, CardNumberElement, CardCvcElement, CardExpiryElement, useStripe, useElements } from "@stripe/react-stripe-js"
+import { PaymentIntent } from '@stripe/stripe-js'
+import { Button } from '@mui/material'
 
+interface Props {
+  callback: (status: PaymentIntent.Status) => void,
+}
+
+export const CheckoutForms = ({ callback }: Props) => {
+
+  const [message, setMessage] = useState('')
   const stripe = useStripe()
   const elements = useElements()
 
@@ -13,24 +20,31 @@ export const CheckoutForms = () => {
       // form submission until Stripe.js has loaded.
       return;
     }
-    const payload = await stripe.createPaymentMethod({
-      type: "card",
-      card: elements.getElement(CardNumberElement)!,
-    });
+    const paymentIntentResult = await stripe.confirmPayment({
+      elements,
+      redirect: "if_required"
+    })
 
-    console.log("[PaymentResponse]", payload);
+    if (paymentIntentResult.error) {
+      setMessage('Error processing your card')
+    } else {
+      const status = paymentIntentResult.paymentIntent?.status ?? ""
+
+      setMessage(status)
+
+      callback(status)
+    }
   }
-
 
 
 
   return <div className="container">
     <form onSubmit={handleSubmit}>
-      <CardNumberElement className='input-wrapper' />
-      <CardExpiryElement className='input-wrapper' />
-      <CardCvcElement className='input-wrapper' />
+      <PaymentElement id="payment-element" />
 
-      <button type="submit" disabled={!stripe}>Pay Now</button>
+      <p>{message}</p>
+
+      <Button variant="outlined" color="success" type="submit" disabled={!stripe}>Pay Now</Button>
     </form>
   </div>
 }
